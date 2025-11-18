@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Conversational Recommender Systems – Study Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- MathJax for equations -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --bg-alt: #ffffff;
+      --bg-elevated: #ffffff;
+      --text: #1f2933;
+      --text-soft: #6b7280;
+      --accent: #2563eb;
+      --accent-soft: rgba(37, 99, 235, 0.1);
+      --accent-strong: #1d4ed8;
+      --border: #e5e7eb;
+      --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.06);
+      --code-bg: #111827;
+      --scrollbar: #9ca3af;
+      --scrollbar-bg: transparent;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-pill: 999px;
+      --transition-fast: 0.18s ease-out;
+    }
+
+    /* Themes */
+    body.theme-academic {
+      --bg: #f5f7fb;
+      --bg-alt: #ffffff;
+      --bg-elevated: #ffffff;
+      --text: #111827;
+      --text-soft: #6b7280;
+      --accent: #2563eb;
+      --accent-soft: rgba(37, 99, 235, 0.06);
+      --accent-strong: #1d4ed8;
+      --border: #e5e7eb;
+      --shadow-soft: 0 12px 35px rgba(15, 23, 42, 0.08);
+      --code-bg: #020617;
+      --scrollbar: #9ca3af;
+    }
+
+    body.theme-dark {
+      --bg: #020617;
+      --bg-alt: #020617;
+      --bg-elevated: #020617;
+      --text: #e5e7eb;
+      --text-soft: #9ca3af;
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.12);
+      --accent-strong: #16a34a;
+      --border: #111827;
+      --shadow-soft: 0 14px 40px rgba(0, 0, 0, 0.6);
+      --code-bg: #020617;
+      --scrollbar: #4b5563;
+    }
+
+    body.theme-gradient {
+      --bg: radial-gradient(circle at 0 0, #0f172a, #020617 55%);
+      --bg-alt: rgba(15, 23, 42, 0.96);
+      --bg-elevated: rgba(15, 23, 42, 0.94);
+      --text: #e5e7eb;
+      --text-soft: #9ca3af;
+      --accent: #a855f7;
+      --accent-soft: rgba(168, 85, 247, 0.18);
+      --accent-strong: #c084fc;
+      --border: rgba(148, 163, 184, 0.35);
+      --shadow-soft: 0 18px 50px rgba(15, 23, 42, 0.9);
+      --code-bg: #020617;
+      --scrollbar: #6b21a8;
+    }
+
+    body.theme-minimal {
+      --bg: #fafafa;
+      --bg-alt: #ffffff;
+      --bg-elevated: #ffffff;
+      --text: #111827;
+      --text-soft: #6b7280;
+      --accent: #111827;
+      --accent-soft: rgba(17, 24, 39, 0.08);
+      --accent-strong: #030712;
+      --border: #e5e7eb;
+      --shadow-soft: 0 8px 22px rgba(0, 0, 0, 0.04);
+      --code-bg: #111827;
+      --scrollbar: #6b7280;
+    }
+
+    body.theme-material {
+      --bg: #f1f5f9;
+      --bg-alt: #e2e8f0;
+      --bg-elevated: #ffffff;
+      --text: #0f172a;
+      --text-soft: #64748b;
+      --accent: #0ea5e9;
+      --accent-soft: rgba(14, 165, 233, 0.16);
+      --accent-strong: #0284c7;
+      --border: #e2e8f0;
+      --shadow-soft: 0 16px 40px rgba(15, 23, 42, 0.16);
+      --code-bg: #020617;
+      --scrollbar: #0ea5e9;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.35s ease, color 0.25s ease;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--scrollbar-bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--scrollbar);
+      border-radius: 999px;
+    }
+
+    /* Top navbar */
+    .top-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.75rem;
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(16px);
+      color: #e5e7eb;
+      z-index: 50;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
+    }
+    .top-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .top-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 14px;
+      background: radial-gradient(circle at 10% 0, #38bdf8, #6366f1 45%, #a855f7 90%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: white;
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.7);
+    }
+    .top-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .top-subtitle {
+      font-size: 0.75rem;
+      color: #cbd5f5;
+    }
+    .top-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.8rem;
+    }
+    .theme-select {
+      background: rgba(15, 23, 42, 0.85);
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      padding: 0.35rem 0.75rem;
+      color: #e5e7eb;
+      outline: none;
+      font-size: 0.77rem;
+      cursor: pointer;
+    }
+    .theme-select:focus {
+      box-shadow: 0 0 0 1px #38bdf8;
+    }
+    .badge {
+      padding: 0.14rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* Layout */
+    .app-shell {
+      display: flex;
+      margin-top: 60px;
+      height: calc(100vh - 60px);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      min-width: 220px;
+      background: rgba(15, 23, 42, 0.96);
+      color: #e5e7eb;
+      padding: 1rem 1.1rem;
+      border-right: 1px solid rgba(148, 163, 184, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      overflow-y: auto;
+    }
+    .sidebar-section-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #9ca3af;
+      margin-bottom: 0.3rem;
+    }
+    .sidebar-main-link {
+      font-size: 0.86rem;
+      font-weight: 500;
+      padding: 0.45rem 0.6rem;
+      border-radius: 0.6rem;
+      display: block;
+      color: #e5e7eb;
+      text-decoration: none;
+      margin-bottom: 0.1rem;
+      transition: background 0.16s ease, transform 0.08s ease;
+    }
+    .sidebar-main-link:hover {
+      background: rgba(148, 163, 184, 0.22);
+      transform: translateX(1px);
+    }
+    .sidebar-main-link.active {
+      background: linear-gradient(to right, #38bdf8, #6366f1);
+      color: white;
+      box-shadow: 0 12px 34px rgba(59, 130, 246, 0.55);
+      transform: translateX(1px);
+    }
+    .sidebar-subnav {
+      margin-top: 0.6rem;
+      border-radius: 0.7rem;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 0.55rem;
+    }
+    .sidebar-subnav a {
+      display: block;
+      font-size: 0.74rem;
+      color: #cbd5f5;
+      text-decoration: none;
+      padding: 0.25rem 0.4rem;
+      border-radius: 0.4rem;
+      transition: background 0.16s ease;
+    }
+    .sidebar-subnav a:hover {
+      background: rgba(148, 163, 184, 0.2);
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      font-size: 0.7rem;
+      color: #9ca3af;
+      border-top: 1px dashed rgba(148, 163, 184, 0.5);
+      padding-top: 0.6rem;
+    }
+
+    /* Main content */
+    .main {
+      flex: 1;
+      padding: 1.4rem 1.8rem 2.5rem 1.8rem;
+      overflow-y: auto;
+    }
+
+    .hero-card {
+      background: var(--bg-elevated);
+      border-radius: var(--radius-lg);
+      padding: 1.4rem 1.6rem;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border);
+      margin-bottom: 1.3rem;
+      display: grid;
+      grid-template-columns: minmax(0, 2.3fr) minmax(0, 2fr);
+      gap: 1.2rem;
+    }
+    .hero-title {
+      font-size: 1.4rem;
+      font-weight: 650;
+      margin-bottom: 0.3rem;
+    }
+    .hero-kicker {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      color: var(--accent);
+      letter-spacing: 0.16em;
+      margin-bottom: 0.4rem;
+    }
+    .hero-text {
+      font-size: 0.86rem;
+      color: var(--text-soft);
+      line-height: 1.5;
+      margin-bottom: 0.8rem;
+    }
+    .hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .pill {
+      font-size: 0.72rem;
+      padding: 0.22rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg-alt);
+    }
+
+    .hero-visual {
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 0 0, var(--accent-soft), transparent 60%),
+                  radial-gradient(circle at 100% 100%, rgba(251, 113, 133, 0.22), transparent 50%),
+                  var(--bg-alt);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      padding: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hero-visual-title {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-soft);
+      margin-bottom: 0.45rem;
+    }
+
+    .hero-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+    .hero-flow-step {
+      flex: 1 1 45%;
+      min-width: 110px;
+      background: var(--bg-elevated);
+      border-radius: 0.7rem;
+      padding: 0.4rem 0.5rem;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 0.74rem;
+    }
+    .hero-flow-step strong {
+      display: block;
+      margin-bottom: 0.2rem;
+      color: var(--accent-strong);
+    }
+
+    .tagline {
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      margin-top: 0.4rem;
+    }
+
+    /* Tabs */
+    .tab-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      padding: 0.4rem 0;
+      background: linear-gradient(to bottom, rgba(245, 247, 251, 0.98), rgba(245, 247, 251, 0.88), transparent);
+    }
+
+    .tab-pill {
+      border-radius: 999px;
+      padding: 0.28rem 0.85rem;
+      font-size: 0.78rem;
+      border: 1px solid var(--border);
+      background: var(--bg-alt);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all var(--transition-fast);
+    }
+
+    .tab-pill span.icon {
+      font-size: 0.9rem;
+    }
+
+    .tab-pill.active {
+      border-color: transparent;
+      background: radial-gradient(circle at 0 0, rgba(59, 130, 246, 0.12), transparent 55%),
+                  radial-gradient(circle at 100% 100%, rgba(236, 72, 153, 0.18), transparent 55%),
+                  var(--accent);
+      color: white;
+      box-shadow: 0 10px 26px rgba(59, 130, 246, 0.55);
+    }
+
+    .tab-pill:hover:not(.active) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.15);
+    }
+
+    /* Sections */
+    .section-panel {
+      display: none;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .section-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Accordion */
+    .accordion {
+      border-radius: var(--radius-lg);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      padding: 0.7rem 0.8rem;
+    }
+
+    .accordion-item {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 0.45rem;
+      border: 1px solid transparent;
+      background: transparent;
+      transition: border var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .accordion-header {
+      padding: 0.55rem 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .accordion-title {
+      font-size: 0.86rem;
+      font-weight: 550;
+    }
+
+    .accordion-icon {
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      transition: transform var(--transition-fast);
+    }
+
+    .accordion-body {
+      padding: 0 0.8rem 0.6rem 0.8rem;
+      display: none;
+      font-size: 0.86rem;
+      color: var(--text-soft);
+      line-height: 1.55;
+    }
+
+    .accordion-item.active {
+      border-color: var(--accent-soft);
+      background: linear-gradient(to bottom right, var(--accent-soft), transparent);
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
+    }
+
+    .accordion-item.active .accordion-body {
+      display: block;
+    }
+
+    .accordion-item.active .accordion-icon {
+      transform: rotate(90deg);
+    }
+
+    .accordion-body p {
+      margin-bottom: 0.45rem;
+    }
+
+    .accordion-body ul {
+      margin-left: 1.1rem;
+      margin-bottom: 0.4rem;
+    }
+    .accordion-body li {
+      margin-bottom: 0.2rem;
+    }
+
+    h3, h4 {
+      margin-bottom: 0.3rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      margin-top: 0.6rem;
+    }
+
+    h4 {
+      font-size: 0.9rem;
+      margin-top: 0.4rem;
+      color: var(--accent-strong);
+    }
+
+    code {
+      background: var(--code-bg);
+      color: #e5e7eb;
+      padding: 0.1rem 0.3rem;
+      border-radius: 0.3rem;
+      font-size: 0.78rem;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: #e5e7eb;
+      padding: 0.7rem 0.9rem;
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+      overflow-x: auto;
+      margin: 0.5rem 0;
+    }
+
+    /* Cards for other views */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 0.8rem;
+    }
+
+    .card {
+      background: var(--bg-elevated);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 0.8rem 0.9rem;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+      font-size: 0.84rem;
+      color: var(--text-soft);
+    }
+    .card h4 {
+      margin-bottom: 0.25rem;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      margin-top: 0.25rem;
+      margin-bottom: 0.4rem;
+    }
+    .tag {
+      font-size: 0.68rem;
+      padding: 0.12rem 0.4rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 0.7rem 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    th, td {
+      padding: 0.34rem 0.4rem;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+    th {
+      background: var(--bg-alt);
+      font-weight: 600;
+    }
+
+    /* "Slides" style */
+    .slide {
+      background: var(--bg-elevated);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 0.8rem 1rem;
+      margin-bottom: 0.7rem;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.09);
+    }
+    .slide-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    .slide-bullets {
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      margin-left: 1.1rem;
+    }
+    .slide-bullets li {
+      margin-bottom: 0.18rem;
+    }
+
+    /* Mindmap */
+    .mindmap {
+      background: var(--bg-elevated);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 0.8rem 0.9rem;
+      box-shadow: var(--shadow-soft);
+      font-size: 0.84rem;
+      color: var(--text-soft);
+    }
+    .mindmap ul {
+      list-style: none;
+      margin-left: 0.4rem;
+      padding-left: 0.7rem;
+      border-left: 1px dashed var(--border);
+    }
+    .mindmap li {
+      margin-bottom: 0.2rem;
+      position: relative;
+      padding-left: 0.4rem;
+    }
+    .mindmap li::before {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      border: 1px solid var(--accent);
+      background: var(--bg-elevated);
+      left: -3px;
+      top: 0.35rem;
+    }
+    .mindmap strong {
+      color: var(--accent-strong);
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .app-shell {
+        flex-direction: column;
+      }
+      .sidebar {
+        position: relative;
+        height: auto;
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: visible;
+        border-right: none;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.5);
+      }
+      .sidebar-main-link {
+        white-space: nowrap;
+      }
+      .sidebar-subnav {
+        display: none;
+      }
+      .main {
+        padding: 1rem 1.1rem 1.8rem 1.1rem;
+      }
+      .hero-card {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .top-nav {
+        padding: 0 1rem;
+      }
+      .top-title {
+        font-size: 0.95rem;
+      }
+      .hero-card {
+        padding: 1rem 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body class="theme-academic">
+  <header class="top-nav">
+    <div class="top-nav-left">
+      <div class="top-logo">CR</div>
+      <div>
+        <div class="top-title">Conversational Recommender Systems</div>
+        <div class="top-subtitle">Study Hub · Notes · Cheat Sheet · Slides</div>
+      </div>
+    </div>
+    <div class="top-nav-right">
+      <span class="badge">Single Page · GitHub Ready</span>
+      <select id="themeSelect" class="theme-select">
+        <option value="academic">Academic</option>
+        <option value="dark">Dark</option>
+        <option value="gradient">Gradient</option>
+        <option value="minimal">Minimal</option>
+        <option value="material">Material</option>
+      </select>
+    </div>
+  </header>
+
+  <div class="app-shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div>
+        <div class="sidebar-section-title">Views</div>
+        <a href="#mega-notes" class="sidebar-main-link active" data-tab-target="mega">
+          📘 Mega Notes
+        </a>
+        <a href="#lecture-notes" class="sidebar-main-link" data-tab-target="lecture">
+          📗 Lecture Notes
+        </a>
+        <a href="#cheatsheet" class="sidebar-main-link" data-tab-target="cheatsheet">
+          📙 Cheat Sheet
+        </a>
+        <a href="#slides" class="sidebar-main-link" data-tab-target="slides">
+          📑 Slide Deck
+        </a>
+        <a href="#mindmap" class="sidebar-main-link" data-tab-target="mindmap">
+          🧠 Mindmap
+        </a>
+      </div>
+
+      <div class="sidebar-subnav">
+        <div class="sidebar-section-title">Mega Sections</div>
+        <a href="#mega-intro">Intro & History</a>
+        <a href="#mega-formal">Problem Formalization</a>
+        <a href="#mega-paradigms">Interaction Paradigms</a>
+        <a href="#mega-arch">System Architectures</a>
+        <a href="#mega-nlu">NLU & NLG</a>
+        <a href="#mega-dsm">Dialog State Management</a>
+        <a href="#mega-rec">Recommendation Engine</a>
+        <a href="#mega-kg">Knowledge Graphs</a>
+        <a href="#mega-eval">Datasets & Evaluation</a>
+        <a href="#mega-industry">Toolkits & Production</a>
+        <a href="#mega-open">Open Challenges</a>
+      </div>
+
+      <div class="sidebar-footer">
+        Built as a single static HTML page.<br>
+        Just drop <code>index.html</code> into a GitHub Pages repo 🧷
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <!-- HERO -->
+      <section class="hero-card">
+        <div>
+          <div class="hero-kicker">From Tutorial Transcript → Structured Knowledge</div>
+          <div class="hero-title">Conversational Recommendation Systems</div>
+          <p class="hero-text">
+            These notes summarize the full tutorial on conversational recommender systems:
+            history, formalization, interaction paradigms, architectures, models, datasets,
+            evaluation, and real-world deployment. Choose between rich mega notes, concise
+            lecture notes, a quick cheat sheet, slide-style bullets, or a hierarchical mindmap.
+          </p>
+          <div class="hero-pills">
+            <span class="pill">Multi-round dialogue</span>
+            <span class="pill">Task-oriented conversational AI</span>
+            <span class="pill">Reinforcement Learning</span>
+            <span class="pill">Knowledge Graphs</span>
+            <span class="pill">Evaluation & Datasets</span>
+          </div>
+          <p class="tagline">
+            Tip: Use the left sidebar to switch views · Use the theme selector for fun ✨
+          </p>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-visual-title">CRS Pipeline (Conceptual)</div>
+          <div class="hero-flow">
+            <div class="hero-flow-step">
+              <strong>1 · Input</strong>
+              User utterance, history, profile, context
+            </div>
+            <div class="hero-flow-step">
+              <strong>2 · NLU</strong>
+              Intent, attributes, sentiment, entities
+            </div>
+            <div class="hero-flow-step">
+              <strong>3 · Dialog Manager</strong>
+              Track state, decide: ask vs recommend
+            </div>
+            <div class="hero-flow-step">
+              <strong>4 · Recommender</strong>
+              Rank items, generate explanation
+            </div>
+            <div class="hero-flow-step">
+              <strong>5 · NLG</strong>
+              Question / response text or templates
+            </div>
+            <div class="hero-flow-step">
+              <strong>6 · Feedback Loop</strong>
+              User reaction → updated belief & policy
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB BAR -->
+      <div class="tab-bar">
+        <button class="tab-pill active" data-tab="mega">
+          <span class="icon">📘</span> Mega Notes
+        </button>
+        <button class="tab-pill" data-tab="lecture">
+          <span class="icon">📗</span> Lecture Notes
+        </button>
+        <button class="tab-pill" data-tab="cheatsheet">
+          <span class="icon">📙</span> Cheat Sheet
+        </button>
+        <button class="tab-pill" data-tab="slides">
+          <span class="icon">📑</span> Slide Deck
+        </button>
+        <button class="tab-pill" data-tab="mindmap">
+          <span class="icon">🧠</span> Mindmap
+        </button>
+      </div>
+
+      <!-- MEGA NOTES -->
+      <section id="mega-notes" class="section-panel active">
+        <div class="accordion">
+          <!-- Intro & History -->
+          <article id="mega-intro" class="accordion-item active">
+            <div class="accordion-header">
+              <div class="accordion-title">1. Introduction & Background</div>
+              <div class="accordion-icon">▶</div>
+            </div>
+            <div class="accordion-body">
+              <p><strong>Conversational Recommendation Systems (CRS)</strong> provide personalized recommendations via
+                <em>multi-turn natural language dialogue</em> (text or voice).</p>
+
+              <h4>1.1 What makes CRS different from classical RS?</h4>
+              <ul>
+                <li><strong>Classical RS:</strong> One-shot interaction: user visits → system shows list once.</li>
+                <li><strong>CRS:</strong> Multi-round:
+                  <ul>
+                    <li>System asks clarification questions (“Do you prefer action or comedy?”).</li>
+                    <li>User answers or asks questions back.</li>
+                    <li>System updates a belief state and then recommends with explanations.</li>
+                  </ul>
+                </li>
+              </ul>
+
+              <h4>1.2 Modalities</h4>
+              <ul>
+                <li>Text chat (web / mobile / in-app assistants).</li>
+                <li>Voice interfaces (smart speakers, phone bots, in-car assistants).</li>
+              </ul>
+
+              <h4>1.3 Brief history</h4>
+              <ul>
+                <li><strong>1987 – I3R (Croft & Thompson):</strong> Early information-seeking via dialogue.</li>
+                <li><strong>1995 – MERIT (Belkin):</strong> Script-based interactive IR.</li>
+                <li><strong>2000 – Goker & Thompson:</strong> First system explicitly called a
+                  <em>conversational recommendation system</em> (police recommendations).</li>
+                <li><strong>2000–2017:</strong> Slow growth, focused on:
+                  natural language issues, diversity, dynamics, cold-start, evaluation.</li>
+                <li><strong>2018+ “New boom”:</strong> Deep learning + reinforcement learning +
+                  industrial deployment → many new models & datasets.</li>
+              </ul>
+
+              <h4>1.4 Why now? (Virtuous cycle)</h4>
+              <ul>
+                <li><strong>Technical:</strong> CRS is a clean, goal-oriented conversational AI task,
+                  great for testing modern DL + RL.</li>
+                <li><strong>Commercial:</strong> Deployed CRS gathers conversational logs → better models
+                  → better UX → more users → more data.</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Problem formalization -->
+          <article id="mega-formal" class="accordion-item">
+            <div class="accordion-header">
+              <div class="accordion-title">2. Problem Formalization</div>
+              <div class="accordion-icon">▶</div>
+            </div>
+            <div class="accordion-body">
+              <p>We model CRS as a sequential decision-making function that uses dialogue history,
+                user profile, and external knowledge to produce the next utterance and recommendations.</p>
+
+              <h4>2.1 Inputs</h4>
+              <ul>
+                <li>\(H_t = (u_1, s_1, \dots, u_t)\): dialogue history up to turn \(t\).</li>
+                <li>\(U\): user profile (clicks, purchases, ratings, demographics, etc.).</li>
+                <li>\(I\): item catalog (items with attributes).</li>
+                <li>\(K\): external knowledge (KGs like DBpedia, ConceptNet, taxonomies).</li>
+              </ul>
+
+              <h4>2.2 Outputs</h4>
+              <ul>
+                <li><strong>Next system utterance</strong> \(s_{t+1}\):
+                  <ul>
+                    <li>Question (ask for missing attributes / facets).</li>
+                    <li>Recommendation (“I suggest movie X”).</li>
+                    <li>Explanation (“because you liked Y…”).</li>
+                    <li>Chit-chat / small talk (build rapport).</li>
+                  </ul>
+                </li>
+                <li><strong>Recommended items</strong> \(R_t \subseteq I\), often as a ranked list.</li>
+              </ul>
+
+              <h4>2.3 CRS as a Markov Decision Process (MDP)</h4>
+              <ul>
+                <li><strong>State</strong> \(s_t\): representation of dialog state
+                  (extracted facets, belief about user, KG context, etc.).</li>
+                <li><strong>Action</strong> \(a_t\): ask facet, recommend, chit-chat, explain, etc.</li>
+                <li><strong>Reward</strong> \(r_t\): click, purchase, acceptance, success, or penalties (too long dialogue).</li>
+                <li><strong>Policy</strong> \(\pi(a_t \mid s_t)\): maps states to actions.</li>
+              </ul>
+
+              <p>Typical RL objective:</p>
+              <p>
+                \[
+                  \max_{\pi} \; \mathbb{E}_\pi \left[ \sum_{t=0}^{T} \gamma^t r_t \right]
+                \]
+              </p>
+              <p>with discount factor \(0 \le \gamma \le 1\).</p>
+            </div>
+          </article>
+
+          <!-- Paradigms -->
+          <article id="mega-paradigms" class="accordion-item">
+            <div class="accordion-header">
+              <div class="accordion-title">3. Interaction Paradigms (SAUP, SAUE, SAUA)</div>
+              <div class="accordion-icon">▶</div>
+            </div>
+            <div class="accordion-body">
+              <p>The tutorial categorizes CRS by who leads the interaction: system, user, or both.</p>
+
+              <h4>3.1 SAUP – System Active, User Passive (System Ask, User Respond)</h4>
+              <ul>
+                <li>System leads by asking structured questions about <strong>attributes / facets</strong>.</li>
+                <li>User mostly gives short, direct answers (yes/no or single value).</li>
+                <li>Example: SAUR (CIKM 2018):
+                  <ul>
+                    <li>System: “Do you care about <em>battery life</em>?”</li>
+                    <li>User: “Yes, very important.”</li>
+                  </ul>
+                </li>
+                <li>Easiest to model, but least natural.</li>
+              </ul>
+
+              <h4>3.2 SAUE – System Active, User Engages</h4>
+              <ul>
+                <li>System asks, but user may:
+                  <ul>
+                    <li>Answer indirectly (“I love classic American literature”).</li>
+                    <li>Express richer preferences and chit-chat.</li>
+                  </ul>
+                </li>
+                <li>Example: <strong>ReDial</strong> – crowdsourced movie conversations.</li>
+              </ul>
+
+              <h4>3.3 SAUA – System Active, User Active</h4>
+              <ul>
+                <li>Both system and user ask questions and drive the conversation.</li>
+                <li>Closest to realistic human-human conversation.</li>
+                <li>Example: DuRecDial and KG-based CRS where seekers have profiles and actively ask.</li>
+              </ul>
+
+              <h4>3.4 Trend</h4>
+              <ul>
+                <li>Paradigm 1 → easiest for RL / simulation.</li>
+                <li>Paradigm 2 & 3 → more natural, but require stronger NLU and dialog policies.</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Architecture -->
+          <article id="mega-arch" class="accordion-item">
+            <div class="accordion-header">
+              <div class="accordion-title">4. System Architectures</div>
+              <div class="accordion-icon">▶</div>
+            </div>
+            <div class="accordion-body">
+              <h4>4.1 Major architectural families</h4>
+              <ul>
+                <li><strong>End-to-end generative models</strong> (seq2seq, LLMs):
+                  <ul>
+                    <li>Input: dialogue context → Output: next utterance.</li>
+                    <li>Pros: flexible, language-rich.</li>
+                    <li>Cons: hard to control, may hallucinate items, weak grounding.</li>
+                  </ul>
+                </li>
+                <li><strong>Data-flow / graph-based architectures:</strong>
+                  represent dialogue as flows on a graph; promising but not yet mainstream in CRS.</li>
+                <li><strong>Modularized architecture</strong> (most common in CRS research):
+                  NLU → DSM → Recommender → NLG.</li>
+              </ul>
+
+              <h4>4.2 Modular CRS pipeline</h4>
+              <ol>
+                <li><strong>NLU:</strong> understand user utterance (intent, facets, entities, sentiment).</li>
+                <li><strong>Dialog State Management:</strong> track what is known & decide what to do next.</li>
+                <li><strong>Recommendation Engine:</strong> use updated state to rank items and generate explanations.</li>
+                <li><strong>NLG:</strong> surface-level realization of questions, answers, and explanations.</li>
+              </ol>
+
+              <p>In practice, many systems mix neural components with rule-/template-based logic for safety and control.</p>
+            </div>
+          </article>
+
+          <!-- NLU / NLG -->
+          <article id="mega-nlu" class="accordion-item">
+            <div class="accordion-header">
+              <div class="accordion-title">5. Natural Language Understanding (NLU) & Generation (NLG)</div>
+              <div class="accordion-icon">▶</div>
+            </div>
+            <div class="accordion-body">
+              <h4>5.1 NLU in CRS</h4>
+              <ul>
+                <li><strong>Intent detection:</strong> request-recommendation, refine, accept, reject, chit-chat, QA.</li>
+                <li><strong>Facet extraction:</strong> attributes like genre, author, city, price, battery life.</li>
+                <li><strong>Entity recognition & linking:</strong> map “The Matrix” → movie in KG.</li>
+                <li><strong>Sentiment analysis:</strong> “I hated that movie” → negative feedback.</li>
+              </ul>
+
+              <h4>5.2 NLG challenges</h4>
+              <ul>
+                <li>Stay coherent with dialogue state & knowledge.</li>
+                <li>Avoid bland “okay / good” answers.</li>
+                <li>Control inclusion of specific facets or items in the utterance.</li>
+              </ul>
+
+              <h4>5.3 NLG styles</h4>
+              <ul>
+                <li><strong>Retrieval-based:</strong>
+                  <ul>
+                    <li>Select from a predefined response pool.</li>
+                    <li>Great fluency, safe; but limited flexibility.</li>
+                  </ul>
+                </li>
+                <li><strong>Generation-based:</strong>
+                  <ul>
+                    <li>Neural text generation, often <em>template-guided</em>.</li>
+                    <li>Template example:
+                      <code>“Because you liked [ITEM_A] and enjoy [GENRE], I recommend [ITEM_B].”</code></li>
+                    <li>Can adapt to unseen combinations of facets.</li>
+                  </ul>
+                </li>
+              </ul>
+
+              <h4>5.4 Example – SAUR (System Ask, User Respond)</h4>
+              <ul>
+                <li>Uses a <strong>multi-memory network</strong> to encode item text and dialogue history.</li>
+                <li>Attention selects relevant parts; retrieval chooses best next question / item.</li>
+                <li>Weakness: rule-of-thumb threshold for “when to recommend”, not a learned policy.</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- DSM -->
+          <article id="mega-dsm" class="accordion-item">
+            <div class="accordion-header">
+              <div class="accordion-title">6. Dialog State Management & Reinforcement Learning</div>
+              <div class="accordion-icon">▶</div>
+            </div>
+            <div class="accordion-body">
+              <p><strong>Dialog State Management (DSM)</strong> = track dialogue state + decide next action.</p>
+
+              <h4>6.1 Key DSM questions</h4>
+              <ul>
+                <li>What is the current belief over the user’s preferences?</li>
+                <li>Is it time to recommend or to ask another question?</li>
+                <li>Which attribute is the most informative to ask about next?</li>
+              </ul>
+
+              <h4>6.2 Conversational Recommender Model (CRM, SIGIR 2018)</h4>
+              <ul>
+                <li>Belief tracker extracts facet–value pairs from utterances.</li>
+                <li>Factorization Machine-based recommender combines user, item, and dialogue state features.</li>
+                <li>Deep RL policy (\(Q\)-network or policy network) chooses actions:</li>
+              </ul>
+
+              <p>
+                \[
+                  Q(s_t, a_t) \leftarrow
+                  Q(s_t, a_t) +
+                  \alpha \big(r_t + \gamma \max_{a'} Q(s_{t+1}, a') - Q(s_t, a_t)\big)
+                \]
+              </p>
+
+              <h4>6.3 Estimation–Action–Reflection (EAR)</h4>
+              <ul>
+                <li>Addresses:
+                  <ol>
+                    <li><strong>Estimation:</strong> what do we know about user facets?</li>
+                    <li><strong>Action:</strong> which facet to ask / when to recommend?</li>
+                    <li><strong>Reflection:</strong> how to update state after feedback?</li>
+                  </ol>
+                </li>
+                <li>Supports multiple recommendation attempts until user accepts or leaves.</li>
+              </ul>
+
+              <h4>6.4 Conversational Path Reasoning (KDD)</h4>
+              <ul>
+                <li>Represent conversation on a <strong>KG graph</strong> with nodes: user, items, attributes, entities.</li>
+                <li>Dialogue becomes a path walk from user node to candidate items.</li>
+                <li>Policy selects next edges (attributes / entities) or recommends items.</li>
+                <li>Negative feedback = prune paths that contradict user’s response.</li>
+                <li>Explainable: show path used to reach recommendation.</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Recommendation engine -->
+          <article id="mega-rec" class="accordion-item">
+            <div class="accordion-header">
+              <div class="accordion-title">7. Recommendation Engine inside CRS</div>
+              <div class="accordion-icon">▶</div>
+            </div>
+            <div class="accordion-body">
+              <p>CRS recommendation is like “normal RS + dialogue-awareness + explanation”.</p>
+
+              <h4>7.1 Facet-aware recommendation</h4>
+              <ul>
+                <li>Use extracted facets as <strong>constraints</strong>:
+                  <em>genre = sci-fi, price &lt; $20, city = London</em>.</li>
+                <li>Filter items by constraints, then rank using a scoring function
+                  \( \hat{y}_{u,i} = f(\text{user}, \text{item}, \text{state}) \).</li>
+              </ul>
+
+              <h4>7.2 Dialogue-embedding-based recommendation</h4>
+              <ul>
+                <li>Encode dialogue into a vector \( \mathbf{h}_t \) using RNN/Transformer.</li>
+                <li>Use \( \mathbf{h}_t \) as dynamic user representation in a neural CF model.</li>
+              </ul>
+
+              <h4>7.3 Explainable CRS</h4>
+              <ul>
+                <li>Explanation modalities:
+                  <ul>
+                    <li><strong>Facet-based:</strong> “Recommended because you like <em>Italian food</em> in <em>Rome</em>.”</li>
+                    <li><strong>Path-based via KG:</strong> show chain: User → Actor → Movie → Director.</li>
+                    <li><strong>Review-based:</strong> highlight text from similar users or items.</li>
+                  </ul>
+                </li>
+                <li>Explanations help users correct the system:
+                  “Actually, I don’t care about that actor, I just like sci-fi.”</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- KG-based -->
+          <article id="mega-kg" class="accordion-item">
+            <div class="accordion-header">
+              <div class="accordion-title">8. Knowledge Graph-based CRS (KGSF & Friends)</div>
+              <div class="accordion-icon">▶</div>
+            </div>
+            <div class="accordion-body">
+              <h4>8.1 Why KGs?</h4>
+              <ul>
+                <li>Connects <strong>words</strong> in dialogue with <strong>item entities</strong> and attributes.</li>
+                <li>Supports semantic reasoning and explainable paths.</li>
+                <li>Improves generalization to unseen combos (“classic American literature” → realism → authors).</li>
+              </ul>
+
+              <h4>8.2 KGSF (KG-based Semantic Fusion, KDD)</h4>
+              <ul>
+                <li>Uses two KGs:
+                  <ul>
+                    <li>Word-level KG (ConceptNet).</li>
+                    <li>Item-level KG (DBpedia / product KG).</li>
+                  </ul>
+                </li>
+                <li>Goal: align embeddings of related nodes when they co-occur in conversation.</li>
+              </ul>
+
+              <p>High-level mutual information objective:</p>
+              <p>
+                \[
+                  I(X; Y) = H(X) - H(X \mid Y)
+                \]
+              </p>
+              <p>Maximizing \(I(X;Y)\) encourages shared information between word and item graphs.</p>
+
+              <h4>8.3 OpenDialKG & Path Decoding</h4>
+              <ul>
+                <li>Dialogs annotated with entity links to a KG.</li>
+                <li>KG path decoder predicts next entity given dialog context.</li>
+                <li>Prunes low-quality paths to reduce search space.</li>
+                <li>Paths themselves act as explanations & state summaries.</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Datasets & evaluation -->
+          <article id="mega-eval" class="accordion-item">
+            <div class="accordion-header">
+              <div class="accordion-title">9. Datasets & Evaluation</div>
+              <div class="accordion-icon">▶</div>
+            </div>
+            <div class="accordion-body">
+              <h4>9.1 Datasets by paradigm (examples)</h4>
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                  <tr>
+                    <th>Dataset</th>
+                    <th>Paradigm</th>
+                    <th>Domain</th>
+                    <th>Notes</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td>SAUR (Amazon)</td>
+                    <td>SAUP</td>
+                    <td>E-commerce</td>
+                    <td>Convert reviews to dialogues; aspects become questions.</td>
+                  </tr>
+                  <tr>
+                    <td>ConvRec (Yelp)</td>
+                    <td>SAUP</td>
+                    <td>Restaurants</td>
+                    <td>Facet-based questions (location, price, category).</td>
+                  </tr>
+                  <tr>
+                    <td>ReDial</td>
+                    <td>SAUE</td>
+                    <td>Movies</td>
+                    <td>Crowdsourced dialogues talking only about movies.</td>
+                  </tr>
+                  <tr>
+                    <td>DuRecDial</td>
+                    <td>SAUA</td>
+                    <td>Movies, Books, etc.</td>
+                    <td>Users have predefined profiles; more natural dialogue.</td>
+                  </tr>
+                  <tr>
+                    <td>OpenDialKG</td>
+                    <td>SAUA</td>
+                    <td>Open Domain</td>
+                    <td>Dialogues linked to KG entities; used for KG reasoning.</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h4>9.2 Evaluation axes</h4>
+              <ul>
+                <li><strong>Recommendation quality:</strong> Precision@K, Recall@K, NDCG, MRR, CTR, conversion.</li>
+                <li><strong>Conversation quality:</strong> success rate, average turns, attribute coverage.</li>
+                <li><strong>Language quality:</strong> BLEU/ROUGE, perplexity, human fluency / coherence ratings.</li>
+                <li><strong>Business metrics:</strong> revenue, retention, satisfaction / NPS.</li>
+              </ul>
+
+              <h4>9.3 Example mixed metrics</h4>
+              <ul>
+                <li><strong>Hit@N within K turns:</strong> probability the target item appears in top-N by turn K.</li>
+                <li><strong>NDCG@N,K:</strong> averages NDCG over turns up to K to trade off ranking vs length.</li>
+              </ul>
+
+              <h4>9.4 Simulation vs human evaluation</h4>
+              <ul>
+                <li><strong>Simulators:</strong> RL training with synthetic users (cheaper, reproducible).</li>
+                <li><strong>Human studies:</strong> required for realistic assessment (expensive but essential).</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Toolkits & production -->
+          <article id="mega-industry" class="accordion-item">
+            <div class="accordion-header">
+              <div class="accordion-title">10. Toolkits & Real-World Systems</div>
+              <div class="accordion-icon">▶</div>
+            </div>
+            <div class="accordion-body">
+              <h4>10.1 Research code & open-source components</h4>
+              <ul>
+                <li>Author labs release CRS code (e.g., GitHub repos from tutorial authors).</li>
+                <li>General NLP / DL libraries: PyTorch, TensorFlow, HuggingFace Transformers.</li>
+                <li>Dialog systems: Rasa, ParlAI, ConvAI toolkits, etc.</li>
+                <li>Recommender system libraries: RecBole, LibRec, Spotlight, etc.</li>
+              </ul>
+
+              <h4>10.2 Commercial conversational AI platforms</h4>
+              <ul>
+                <li>Microsoft Bot Framework, Google Dialogflow, Amazon Lex, IBM Watson Assistant, etc.</li>
+                <li>All support:
+                  <ul>
+                    <li>Intent classification, NER.</li>
+                    <li>Dialog flows / state machines.</li>
+                    <li>Multi-channel deployment (web, voice, messaging apps).</li>
+                  </ul>
+                </li>
+                <li><strong>Important:</strong> Not designed specifically for CRS; need custom dialog manager + RS integration.</li>
+              </ul>
+
+              <h4>10.3 Production architecture (high-level)</h4>
+              <ul>
+                <li>Core:
+                  <ul>
+                    <li>NLU + DS manager + NLG.</li>
+                    <li>Recommender system (existing e-commerce RS integrated).</li>
+                    <li>Action engine (order placement, status checking, etc.).</li>
+                  </ul>
+                </li>
+                <li>Connectors:
+                  <ul>
+                    <li>Product DB, CMS, enterprise KGs.</li>
+                    <li>CRM / user DB for personalization.</li>
+                    <li>Contact center for escalation to human agents.</li>
+                  </ul>
+                </li>
+                <li>Management:
+                  <ul>
+                    <li>Designer console for flows & business rules.</li>
+                    <li>Analytics for dialog-level & business metrics.</li>
+                    <li>Versioning + A/B testing + monitoring.</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Open challenges -->
+          <article id="mega-open" class="accordion-item">
+            <div class="accordion-header">
+              <div class="accordion-title">11. Open Challenges & Research Directions</div>
+              <div class="accordion-icon">▶</div>
+            </div>
+            <div class="accordion-body">
+              <h4>11.1 Naturalness vs control</h4>
+              <ul>
+                <li>LLMs give great natural language, but:
+                  <ul>
+                    <li>Need strict control over items (no hallucinations).</li>
+                    <li>Need alignment with RS scores and business constraints.</li>
+                  </ul>
+                </li>
+              </ul>
+
+              <h4>11.2 Sample efficiency for RL</h4>
+              <ul>
+                <li>Real users are expensive; simulators are imperfect.</li>
+                <li>Need better user simulators and off-policy learning from logs.</li>
+              </ul>
+
+              <h4>11.3 Personalization and fairness</h4>
+              <ul>
+                <li>Balancing personalization vs exposure diversity.</li>
+                <li>Avoid amplifying biases while still being helpful.</li>
+              </ul>
+
+              <h4>11.4 Multi-domain & multi-task CRS</h4>
+              <ul>
+                <li>CRS that can handle movies + music + shopping + QA + task completion.</li>
+                <li>Need robust intent routing and shared representations.</li>
+              </ul>
+
+              <h4>11.5 Evaluation beyond accuracy</h4>
+              <ul>
+                <li>How to measure:
+                  <ul>
+                    <li>User satisfaction over many sessions.</li>
+                    <li>Trust, perceived agency, feeling of being understood.</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- LECTURE NOTES -->
+      <section id="lecture-notes" class="section-panel">
+        <div class="grid">
+          <div class="card">
+            <h4>Block 1 – Introduction & Motivation</h4>
+            <ul class="slide-bullets">
+              <li>CRS = recommender systems + dialog systems.</li>
+              <li>Two perspectives:
+                <ul>
+                  <li><strong>Technical:</strong> testbed for deep RL, NLU, NLG.</li>
+                  <li><strong>Commercial:</strong> better UX → more data → better models.</li>
+                </ul>
+              </li>
+              <li>History: I3R → MERIT → first “conversational recommendation” system → recent deep-learning boom.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h4>Block 2 – Problem Definition</h4>
+            <ul class="slide-bullets">
+              <li>Inputs: dialogue history, user profile, item catalog, optional KG.</li>
+              <li>Outputs: next utterance + ranked item list.</li>
+              <li>Framed as MDP with state \(s_t\), action \(a_t\), reward \(r_t\), policy \(\pi\).</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h4>Block 3 – Interaction Paradigms</h4>
+            <ul class="slide-bullets">
+              <li>SAUP: system questions, user gives short answers.</li>
+              <li>SAUE: system leads, user answers + chit-chat.</li>
+              <li>SAUA: both system & user lead, ask questions, and refine.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h4>Block 4 – Modular Architecture</h4>
+            <ul class="slide-bullets">
+              <li>NLU → DSM → Recommender → NLG pipeline.</li>
+              <li>Variants: end-to-end generative, data-flow, hybrid systems.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h4>Block 5 – NLU & NLG</h4>
+            <ul class="slide-bullets">
+              <li>NLU: intents, facets, sentiment, entities.</li>
+              <li>NLG: retrieval vs generation, templates, slot filling.</li>
+              <li>SAUR model: multi-memory network for question selection.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h4>Block 6 – Dialog State & RL</h4>
+            <ul class="slide-bullets">
+              <li>CRM: RL policy over ask/recommend actions.</li>
+              <li>EAR: estimation–action–reflection cycle.</li>
+              <li>Graph-based path reasoning: encode conversation as KG walk.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h4>Block 7 – Recommendation Models</h4>
+            <ul class="slide-bullets">
+              <li>Facet constraints + ranking model.</li>
+              <li>Dialogue embeddings as dynamic user representation.</li>
+              <li>Explanations: facet-based, KG-path-based, review-based.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h4>Block 8 – Knowledge Graphs</h4>
+            <ul class="slide-bullets">
+              <li>KGSF: fuse word KG and item KG via mutual information.</li>
+              <li>OpenDialKG: dialogues grounded in KG entities.</li>
+              <li>Path decoders: generate entity paths as recommendations & explanations.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h4>Block 9 – Datasets & Evaluation</h4>
+            <ul class="slide-bullets">
+              <li>Datasets: SAUR, ConvRec, ReDial, DuRecDial, OpenDialKG.</li>
+              <li>Metrics: RS metrics (P@K, NDCG), dialog metrics (length, success), language metrics, business metrics.</li>
+              <li>Offline (logs, simulators) vs online (A/B tests, user studies).</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h4>Block 10 – Toolkits & Production</h4>
+            <ul class="slide-bullets">
+              <li>Use open-source & commercial platforms for NLU & deployment.</li>
+              <li>But CRS-specific dialog policies and RS must be integrated manually.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h4>Block 11 – Open Problems</h4>
+            <ul class="slide-bullets">
+              <li>LLM-based CRS with strict grounding & safety.</li>
+              <li>Very data-efficient RL.</li>
+              <li>Trust, fairness, long-term satisfaction.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- CHEAT SHEET -->
+      <section id="cheatsheet" class="section-panel">
+        <div class="grid">
+          <div class="card">
+            <h4>Core Definitions</h4>
+            <ul>
+              <li><strong>CRS:</strong> Recommender system that interacts in multi-turn natural language.</li>
+              <li><strong>Facet / Attribute:</strong> Property of items (genre, price, city, author).</li>
+              <li><strong>Dialogue State:</strong> Encodes what we know about user + context.</li>
+              <li><strong>Policy:</strong> Strategy to decide next action based on state.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h4>MDP for CRS</h4>
+            <p>State \(s_t\), action \(a_t\), reward \(r_t\), transition \(p(s_{t+1} \mid s_t, a_t)\).</p>
+            <p>Return:</p>
+            <p>\[
+              G_t = \sum_{k=0}^{T-t} \gamma^k r_{t+k}
+            \]</p>
+            <p>Objective:</p>
+            <p>\[
+              \max_\pi \mathbb{E}_\pi [ G_0 ]
+            \]</p>
+          </div>
+
+          <div class="card">
+            <h4>Interaction Paradigms (Quick)</h4>
+            <ul>
+              <li><strong>SAUP:</strong> System asks, user responds shortly.</li>
+              <li><strong>SAUE:</strong> System asks, user responds + chit-chat.</li>
+              <li><strong>SAUA:</strong> Both system and user drive questions.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h4>Architecture Cheat Sheet</h4>
+            <ul>
+              <li>NLU: intent + facets + entities + sentiment.</li>
+              <li>DSM: state tracking + action choice (ask / recommend / explain / chit-chat).</li>
+              <li>Recommender: CF, FM, KG-based, neural ranking.</li>
+              <li>NLG: templates + neural generation.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h4>Typical Actions</h4>
+            <ul>
+              <li>\(a =\) ASK(facet): ask about attribute value.</li>
+              <li>\(a =\) RECOMMEND(k): show top-k items.</li>
+              <li>\(a =\) EXPLAIN(item): explain why item was suggested.</li>
+              <li>\(a =\) CHITCHAT: build rapport or handle small talk.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h4>Reinforcement Learning</h4>
+            <ul>
+              <li>Q-learning update:
+                <p>\[
+                  Q(s,a) \leftarrow Q(s,a) + \alpha\big(r + \gamma \max_{a'} Q(s',a') - Q(s,a)\big)
+                \]</p>
+              </li>
+              <li>Reward design:
+                <ul>
+                  <li>+1 if user accepts recommendation.</li>
+                  <li>0 if not sure / continues.</li>
+                  <li>Negative for long dialogues / user leaving early.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h4>Key Models to Remember</h4>
+            <ul>
+              <li><strong>SAUR:</strong> multi-memory network for question & item selection.</li>
+              <li><strong>CRM:</strong> RL-based conversation policy + FM recommender.</li>
+              <li><strong>EAR:</strong> estimation–action–reflection.</li>
+              <li><strong>KGSF:</strong> semantic fusion of word & item KGs.</li>
+              <li><strong>OpenDialKG:</strong> KG-grounded open-domain dialogue.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h4>Evaluation Cheat Sheet</h4>
+            <ul>
+              <li><strong>RS metrics:</strong> P@K, R@K, NDCG, MRR.</li>
+              <li><strong>Dialogue metrics:</strong> turns-to-success, success rate, hit@N by turn K.</li>
+              <li><strong>Language metrics:</strong> BLEU, ROUGE, human fluency & coherence.</li>
+              <li><strong>Biz metrics:</strong> CTR, conversion rate, revenue.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h4>Real-world Checklist</h4>
+            <ul>
+              <li>Ground all items in real catalog (no hallucination).</li>
+              <li>Comply with business constraints (price, availability, fairness).</li>
+              <li>Handle fallback & escalation to human agents.</li>
+              <li>Log everything for training and evaluation.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDES -->
+      <section id="slides" class="section-panel">
+        <div class="slide">
+          <div class="slide-title">Slide 1 – What is a Conversational Recommender System?</div>
+          <ul class="slide-bullets">
+            <li>Recommender system that interacts via multi-turn dialogue.</li>
+            <li>User and system exchange questions and answers.</li>
+            <li>Goal: find relevant items efficiently & transparently.</li>
+          </ul>
+        </div>
+
+        <div class="slide">
+          <div class="slide-title">Slide 2 – Why CRS Matters</div>
+          <ul class="slide-bullets">
+            <li>Technically: benchmark for advanced conversational AI.</li>
+            <li>Commercially: supports more natural product discovery.</li>
+            <li>Creates a data-feedback loop: more usage → better models.</li>
+          </ul>
+        </div>
+
+        <div class="slide">
+          <div class="slide-title">Slide 3 – Core Components</div>
+          <ul class="slide-bullets">
+            <li>Natural Language Understanding (NLU).</li>
+            <li>Dialog State Management (DSM).</li>
+            <li>Recommendation Engine.</li>
+            <li>Natural Language Generation (NLG).</li>
+          </ul>
+        </div>
+
+        <div class="slide">
+          <div class="slide-title">Slide 4 – Interaction Paradigms</div>
+          <ul class="slide-bullets">
+            <li>SAUP: system asks, user responds shortly.</li>
+            <li>SAUE: system leads, user engages more freely.</li>
+            <li>SAUA: both are active; more natural but harder to model.</li>
+          </ul>
+        </div>
+
+        <div class="slide">
+          <div class="slide-title">Slide 5 – RL for Dialog Policy</div>
+          <ul class="slide-bullets">
+            <li>State encodes: known facets, candidate items, dialogue context.</li>
+            <li>Actions: ask facet, recommend, explain, chit-chat.</li>
+            <li>Reward: success, clicks, short dialogue, user satisfaction.</li>
+          </ul>
+        </div>
+
+        <div class="slide">
+          <div class="slide-title">Slide 6 – Knowledge Graphs</div>
+          <ul class="slide-bullets">
+            <li>KGSF uses two KGs to connect language and items.</li>
+            <li>OpenDialKG uses KG paths to drive conversation.</li>
+            <li>Paths provide both state representation and explanation.</li>
+          </ul>
+        </div>
+
+        <div class="slide">
+          <div class="slide-title">Slide 7 – From Research to Production</div>
+          <ul class="slide-bullets">
+            <li>Use NLU & deployment features from commercial platforms.</li>
+            <li>Plug in custom CRS policies & recommenders.</li>
+            <li>Integrate with product DB, CRM, and contact center.</li>
+          </ul>
+        </div>
+
+        <div class="slide">
+          <div class="slide-title">Slide 8 – Future Directions</div>
+          <ul class="slide-bullets">
+            <li>LLM-based CRS with grounding & safety.</li>
+            <li>Multi-domain virtual assistants with CRS inside.</li>
+            <li>Better evaluation: long-term satisfaction & trust.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- MINDMAP -->
+      <section id="mindmap" class="section-panel">
+        <div class="mindmap">
+          <ul>
+            <li><strong>Conversational Recommender Systems</strong>
+              <ul>
+                <li><strong>Background</strong>
+                  <ul>
+                    <li>IR & HCI roots (I3R, MERIT, early conversational RS).</li>
+                    <li>Deep learning boom (2018+).</li>
+                  </ul>
+                </li>
+                <li><strong>Problem Definition</strong>
+                  <ul>
+                    <li>Inputs: dialogue history, user profile, items, KGs.</li>
+                    <li>Outputs: next utterance + recommendations.</li>
+                    <li>MDP: state, action, reward, policy.</li>
+                  </ul>
+                </li>
+                <li><strong>Interaction Paradigms</strong>
+                  <ul>
+                    <li>SAUP – System Ask, User Respond.</li>
+                    <li>SAUE – System Ask, User Engages.</li>
+                    <li>SAUA – System & User Active.</li>
+                  </ul>
+                </li>
+                <li><strong>Architecture</strong>
+                  <ul>
+                    <li>NLU.</li>
+                    <li>Dialog State Manager (RL, rules, KG path).</li>
+                    <li>Recommender (CF, FM, KG-based).</li>
+                    <li>NLG (retrieval, generation, templates).</li>
+                  </ul>
+                </li>
+                <li><strong>Key Models</strong>
+                  <ul>
+                    <li>SAUR – multi-memory network.</li>
+                    <li>CRM – RL for ask/recommend.</li>
+                    <li>EAR – estimation–action–reflection.</li>
+                    <li>KGSF – dual-KG semantic fusion.</li>
+                    <li>OpenDialKG – KG-grounded open-domain dialogue.</li>
+                  </ul>
+                </li>
+                <li><strong>Datasets & Evaluation</strong>
+                  <ul>
+                    <li>SAUR, ConvRec, ReDial, DuRecDial, OpenDialKG.</li>
+                    <li>Metrics: RS, dialog, language, business KPIs.</li>
+                  </ul>
+                </li>
+                <li><strong>Production Systems</strong>
+                  <ul>
+                    <li>Use commercial platforms for NLU & channels.</li>
+                    <li>Add custom CRS policies & RS backend.</li>
+                    <li>Integrate with CRM, catalogs, contact center.</li>
+                  </ul>
+                </li>
+                <li><strong>Open Problems</strong>
+                  <ul>
+                    <li>LLMs + grounding + safety.</li>
+                    <li>Sample-efficient RL from logs & simulators.</li>
+                    <li>Fairness, transparency, long-term UX.</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Theme switching
+    const themeSelect = document.getElementById('themeSelect');
+    const savedTheme = localStorage.getItem('crs-theme');
+    if (savedTheme) {
+      document.body.className = 'theme-' + savedTheme;
+      themeSelect.value = savedTheme;
+    }
+
+    themeSelect.addEventListener('change', () => {
+      const value = themeSelect.value;
+      document.body.className = 'theme-' + value;
+      localStorage.setItem('crs-theme', value);
+    });
+
+    // Tabs
+    const tabButtons = document.querySelectorAll('.tab-pill');
+    const panels = {
+      mega: document.getElementById('mega-notes'),
+      lecture: document.getElementById('lecture-notes'),
+      cheatsheet: document.getElementById('cheatsheet'),
+      slides: document.getElementById('slides'),
+      mindmap: document.getElementById('mindmap')
+    };
+
+    function activateTab(name) {
+      // buttons
+      tabButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === name);
+      });
+      // panels
+      Object.entries(panels).forEach(([key, panel]) => {
+        panel.classList.toggle('active', key === name);
+      });
+      // sidebar main links
+      document.querySelectorAll('.sidebar-main-link').forEach(link => {
+        const target = link.dataset.tabTarget;
+        if (target) {
+          link.classList.toggle('active', target === name);
+        }
+      });
+    }
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const name = btn.dataset.tab;
+        activateTab(name);
+      });
+    });
+
+    // Sidebar main links -> tabs
+    document.querySelectorAll('.sidebar-main-link[data-tab-target]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const name = link.dataset.tabTarget;
+        activateTab(name);
+        // scroll to top of main
+        document.querySelector('.main').scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    // Accordion toggle
+    document.querySelectorAll('.accordion-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const item = header.parentElement;
+        item.classList.toggle('active');
+      });
+    });
+
+    // Smooth scroll for subnav internal anchors
+    document.querySelectorAll('.sidebar-subnav a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        e.preventDefault();
+        const id = anchor.getAttribute('href').slice(1);
+        const el = document.getElementById(id);
+        if (el) {
+          // ensure mega tab is active
+          activateTab('mega');
+          const y = el.getBoundingClientRect().top + window.scrollY - 80;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
